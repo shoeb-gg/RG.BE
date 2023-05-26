@@ -1,10 +1,13 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 
 import { ApiTags } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
 
 import { UserDto } from 'src/common/dto/user.dto';
+import { JwtAuthGuard } from '../jwt-roles/jwt-auth.guard';
+import { Roles } from '../jwt-roles/roles.decorator';
+import { RoleGuard } from '../jwt-roles/roles.guard';
 
 @ApiTags('Account Settings')
 @Controller('auth')
@@ -19,5 +22,19 @@ export class AuthController {
   @Post()
   async createUser(@Body() userInfo: UserDto): Promise<any> {
     return this.auth.createUser(userInfo);
+  }
+
+  @Post('login')
+  async UserLogin(@Body() BodyData: UserDto): Promise<any> {
+    return this.auth.UserLogin(BodyData);
+  }
+
+  //localhost:1111/api/auth/allusers
+  //Using Jwt Guard Admin
+  @Roles('user')
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Get('allusers')
+  async GetAllUsers(): Promise<any> {
+    return this.auth.GetAllUsers();
   }
 }
