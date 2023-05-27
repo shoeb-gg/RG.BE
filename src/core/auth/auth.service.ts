@@ -1,9 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { plainToClass } from 'class-transformer';
 
 import { PrismaClient } from '@prisma/client';
-
-import { plainToClass } from 'class-transformer';
 
 import { UserDto } from 'src/common/dto/user.dto';
 
@@ -11,6 +10,7 @@ import { UserDto } from 'src/common/dto/user.dto';
 export class AuthService {
   constructor(private JwtService: JwtService) {}
   private readonly prisma = new PrismaClient();
+
   async createUser(userInfo: UserDto): Promise<any> {
     const newUser = plainToClass(UserDto, userInfo);
 
