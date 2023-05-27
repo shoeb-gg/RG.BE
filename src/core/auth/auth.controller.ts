@@ -9,7 +9,7 @@ import { JwtAuthGuard } from '../jwt-roles/jwt-auth.guard';
 import { Roles } from '../jwt-roles/roles.decorator';
 import { RoleGuard } from '../jwt-roles/roles.guard';
 
-@ApiTags('Account Settings')
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly auth: AuthService) {}
@@ -21,12 +21,12 @@ export class AuthController {
 
   @Post()
   async createUser(@Body() userInfo: UserDto): Promise<any> {
-    return this.auth.createUser(userInfo);
+    return await this.auth.createUser(userInfo);
   }
 
   @Post('login')
   async UserLogin(@Body() BodyData: UserDto): Promise<any> {
-    return this.auth.UserLogin(BodyData);
+    return await this.auth.UserLogin(BodyData);
   }
 
   //localhost:1111/api/auth/allusers
@@ -35,6 +35,6 @@ export class AuthController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Get('allusers')
   async GetAllUsers(): Promise<any> {
-    return this.auth.GetAllUsers();
+    return await this.auth.GetAllUsers();
   }
 }
