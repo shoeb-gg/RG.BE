@@ -11,15 +11,15 @@ import { PartnerBusinessDetailsDto } from 'src/common/dto/partner-business-detai
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
 
-  @Get('reg-details')
-  async getAccountDetails(@Param() partnerId: string): Promise<string> {
+  @Get('reg-details/:partnerId')
+  async getAccountDetails(@Param('partnerId') partnerId: string): Promise<string> {
     return await this.accountService.getAccountDetails(partnerId);
   }
 
-  @Post('reg-details')
+  @Post('reg-details/:partnerId')
   async createAccountDetails(
     @Body() partnerRegInfo: PartnerRegistrationDetailsDto,
-    @Param() partnerId: any,
+    @Param('partnerId') partnerId: any,
   ): Promise<any> {
     return await this.accountService.createAccountDetails(
       partnerId,
@@ -27,10 +27,10 @@ export class AccountController {
     );
   }
 
-  @Post('business-details')
+  @Post('business-details/:partnerId')
   async createBusinessDetails(
     @Body() partnerBusinessInfo: PartnerBusinessDetailsDto,
-    @Param() partnerId: any,
+    @Param('partnerId') partnerId: any,
   ): Promise<any> {
     return await this.accountService.createBusinessDetails(
       partnerId,
