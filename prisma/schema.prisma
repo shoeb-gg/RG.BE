@@ -7,17 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-//Driver reg model
 model driver_reg_details {
   id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   created_at        DateTime? @default(now()) @db.Timestamptz(6)
   full_name         String?
   dob               DateTime? @db.Date
   age               Int?      @db.SmallInt
-  tenure            Int?      @db.SmallInt
-  experience        Int?      @db.SmallInt
-  license_number    Int?      @unique
-  license_photo_url String?    @unique
+  tenure            Int?
+  experience        Int?
+  license_number    String?   @unique
+  license_photo_url String?   @unique
   driver_photo_url  String?   @unique
   user_id           String?   @db.Uuid
   Users             users?    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
@@ -90,7 +89,7 @@ model users {
   full_name                String?
   type                     String?
   account_details          account_details[]
+  driver_reg_details       driver_reg_details[]
   partner_business_details partner_business_details[]
   partner_reg_details      partner_reg_details[]
-  driver_reg_details       driver_reg_details[]
 }
