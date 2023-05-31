@@ -5,6 +5,7 @@ import { PrismaClient } from '@prisma/client';
 
 import { PartnerRegistrationDetailsDto } from 'src/common/dto/partner-reg-details.dto';
 import { PartnerBusinessDetailsDto } from 'src/common/dto/partner-business-details';
+import { DriverRegistrationDetailsDto } from 'src/common/dto/driver-reg-details';
 
 @Injectable()
 export class AccountService {
@@ -64,6 +65,31 @@ export class AccountService {
     } catch (err) {
       console.log(err);
 
+      return false;
+    }
+  }
+
+  //Driver registration by partner
+  async createDriverDetails(
+    partnerId: any,
+    DriverRegistrationDetails: DriverRegistrationDetailsDto,
+  ): Promise<boolean> {
+    const newDriverReg = plainToClass(
+      DriverRegistrationDetailsDto,
+      DriverRegistrationDetails,
+    );
+    try {
+      await this.prisma.driver_reg_details.create({
+        data: {
+          Users: {
+            connect: { id: partnerId },
+          },
+          ...newDriverReg,
+        },
+      });
+      return true;
+    } catch (error) {
+      console.log(error);
       return false;
     }
   }

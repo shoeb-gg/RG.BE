@@ -5,6 +5,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { AccountService } from './account.service';
 import { PartnerRegistrationDetailsDto } from 'src/common/dto/partner-reg-details.dto';
 import { PartnerBusinessDetailsDto } from 'src/common/dto/partner-business-details';
+import { DriverRegistrationDetailsDto } from 'src/common/dto/driver-reg-details';
 
 @ApiTags('Account Settings')
 @Controller('settings/account')
@@ -12,7 +13,9 @@ export class AccountController {
   constructor(private readonly accountService: AccountService) {}
 
   @Get('reg-details/:partnerId')
-  async getAccountDetails(@Param('partnerId') partnerId: string): Promise<string> {
+  async getAccountDetails(
+    @Param('partnerId') partnerId: string,
+  ): Promise<string> {
     return await this.accountService.getAccountDetails(partnerId);
   }
 
@@ -35,6 +38,17 @@ export class AccountController {
     return await this.accountService.createBusinessDetails(
       partnerId,
       partnerBusinessInfo,
+    );
+  }
+
+  @Post('driver-reg-details/:partnerId')
+  async createDriverDetails(
+    @Body() DriverRegistrationDetails: DriverRegistrationDetailsDto,
+    @Param('partnerId') partnerId: any,
+  ): Promise<any> {
+    return await this.accountService.createDriverDetails(
+      partnerId,
+      DriverRegistrationDetails,
     );
   }
 }
