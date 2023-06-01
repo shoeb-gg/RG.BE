@@ -4,8 +4,8 @@ import { ApiTags } from '@nestjs/swagger';
 
 import { AccountService } from './account.service';
 import { PartnerRegistrationDetailsDto } from 'src/common/dto/partner-reg-details.dto';
-import { PartnerBusinessDetailsDto } from 'src/common/dto/partner-business-details';
-import { DriverRegistrationDetailsDto } from 'src/common/dto/driver-reg-details';
+import { PartnerBusinessDetailsDto } from 'src/common/dto/partner-business-details.dto';
+import { DriverRegistrationDetailsDto } from 'src/common/dto/driver-reg-details.dto';
 
 @ApiTags('Account Settings')
 @Controller('settings/account')
