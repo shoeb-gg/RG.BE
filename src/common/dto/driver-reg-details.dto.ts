@@ -3,9 +3,9 @@ export class DriverRegistrationDetailsDto {
   full_name: string;
   dob: Date;
   age: number;
-  tenure: number;
+  tenure?: number;
   experience: number;
-  license_number: number;
+  license_number: string;
   license_photo_url: string;
   driver_photo_url: string;
 }

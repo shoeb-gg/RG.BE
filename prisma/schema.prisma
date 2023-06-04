@@ -10,16 +10,16 @@ datasource db {
 model driver_reg_details {
   id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   created_at        DateTime? @default(now()) @db.Timestamptz(6)
-  full_name         String?
-  dob               DateTime? @db.Date
-  age               Int?      @db.SmallInt
+  full_name         String
+  dob               DateTime  @db.Date
+  age               Int       @db.SmallInt
   tenure            Int?
-  experience        Int?
-  license_number    String?   @unique
-  license_photo_url String?   @unique
-  driver_photo_url  String?   @unique
-  user_id           String?   @db.Uuid
-  Users             users?    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  experience        Int
+  license_number    String    @unique
+  license_photo_url String    @unique
+  driver_photo_url  String    @unique
+  user_id           String    @db.Uuid
+  Users             users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -32,8 +32,8 @@ model partner_business_details {
   business_address    String?
   business_start_date DateTime? @db.Date
   business_mobile     String?
-  user_id             String?   @db.Uuid
-  Users               users?    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user_id             String    @db.Uuid
+  Users               users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -41,20 +41,17 @@ model partner_business_details {
 model partner_reg_details {
   id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   created_at          DateTime? @default(now()) @db.Timestamptz(6)
-  full_name           String?
-  mobile              String?   @unique
-  mothers_name        String?
-  fathers_name        String?
-  dob                 DateTime? @db.Date
-  age                 Int?      @db.SmallInt
+  full_name           String
+  mothers_name        String
+  fathers_name        String
+  dob                 DateTime  @db.Date
+  age                 Int       @db.SmallInt
   country             String?
-  present_address     String?
+  present_address     String
   house_number        Int?
   road_number         Int?
-  street              String?
   permanent_address   String?
   nid_number          String?   @unique
-  occupation          String?
   bank_name           String?
   bank_branch         String?
   bank_account_number String?
@@ -62,8 +59,13 @@ model partner_reg_details {
   nagad_number        String?   @unique
   mothers_name_bangla String?
   fathers_name_bangla String?
-  user_id             String?   @db.Uuid
-  Users               users?    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user_id             String    @db.Uuid
+  nid_front_photo_url String?   @unique
+  nid_back_photo_url  String?   @unique
+  other_id_number     String?   @unique
+  other_id_photo_url  String?   @unique
+  selfie_photo_url    String?   @unique
+  Users               users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -77,10 +79,10 @@ model account_details {
   present_address  String?
   country          String?
   photo_url        String?   @unique
-  user_id          String?   @db.Uuid
+  user_id          String    @db.Uuid
   form_completed   Boolean   @default(false)
   account_verified Boolean   @default(false)
-  users            users?    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users            users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
