@@ -1,6 +1,9 @@
+import { Type } from 'class-transformer';
+
 export class DriverRegistrationDetailsDto {
   id: any;
   full_name: string;
+  @Type(()=>Date)
   dob: Date;
   age: number;
   tenure?: number;
