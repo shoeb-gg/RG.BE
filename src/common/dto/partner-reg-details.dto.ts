@@ -1,10 +1,15 @@
 import { Exclude, Type } from 'class-transformer';
+import { IsNotEmpty } from 'class-validator';
 
 export class PartnerRegistrationDetailsDto {
   id: any;
+  @IsNotEmpty()
   full_name: string;
+  @IsNotEmpty()
   mothers_name: string;
+  @IsNotEmpty()
   fathers_name: string;
+  @IsNotEmpty()
   @Type(() => Date)
   dob: Date;
   @Type(() => Number)

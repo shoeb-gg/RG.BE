@@ -5,6 +5,7 @@ import {
 } from '@nestjs/platform-fastify';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
 
 declare const module: any;
 
@@ -16,6 +17,7 @@ async function bootstrap() {
 
   app.setGlobalPrefix('/api');
   app.enableCors();
+  app.useGlobalPipes(new ValidationPipe());
 
   const config = new DocumentBuilder()
     .setTitle('RG')
