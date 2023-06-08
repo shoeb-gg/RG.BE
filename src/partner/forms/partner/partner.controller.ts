@@ -5,6 +5,7 @@ import { PartnerRegistrationDetailsDto } from 'src/common/dto/partner-reg-detail
 import { PartnerBusinessDetailsDto } from 'src/common/dto/partner-business-details.dto';
 
 import { PartnerService } from './partner.service';
+import { successResponse } from 'src/common/models/res.success';
 
 @Controller('partner')
 @ApiTags('Partner Registration')
@@ -22,7 +23,7 @@ export class PartnerController {
   async upsertRegDetails(
     @Body() partnerRegInfo: PartnerRegistrationDetailsDto,
     @Param('partnerId') partnerId: string,
-  ): Promise<boolean> {
+  ): Promise<successResponse> {
     return await this.partnerService.upsertRegDetails(
       partnerId,
       partnerRegInfo,
