@@ -12,18 +12,18 @@ export class PartnerController {
   constructor(private readonly partnerService: PartnerService) {}
 
   @Get('reg-details/:partnerId')
-  async getAccountDetails(
+  async getRegDetails(
     @Param('partnerId') partnerId: string,
-  ): Promise<string> {
-    return await this.partnerService.getAccountDetails(partnerId);
+  ): Promise<PartnerRegistrationDetailsDto> {
+    return await this.partnerService.getRegDetails(partnerId);
   }
 
   @Post('reg-details/:partnerId')
-  async createAccountDetails(
+  async upsertRegDetails(
     @Body() partnerRegInfo: PartnerRegistrationDetailsDto,
-    @Param('partnerId') partnerId: any,
-  ): Promise<any> {
-    return await this.partnerService.createAccountDetails(
+    @Param('partnerId') partnerId: string,
+  ): Promise<boolean> {
+    return await this.partnerService.upsertRegDetails(
       partnerId,
       partnerRegInfo,
     );

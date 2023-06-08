@@ -8,7 +8,7 @@ datasource db {
 }
 
 model driver_reg_details {
-  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                String    @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   created_at        DateTime? @default(now()) @db.Timestamptz(6)
   full_name         String
   dob               DateTime  @db.Date
@@ -25,21 +25,21 @@ model driver_reg_details {
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model partner_business_details {
-  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                  String    @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   created_at          DateTime? @default(now()) @db.Timestamptz(6)
   business_name       String?
   business_id         String?   @unique
   business_address    String?
   business_start_date DateTime? @db.Date
   business_mobile     String?
-  user_id             String    @db.Uuid
+  user_id             String    @unique @db.Uuid
   Users               users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model partner_reg_details {
-  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                  String    @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   created_at          DateTime? @default(now()) @db.Timestamptz(6)
   full_name           String
   mothers_name        String
@@ -59,7 +59,7 @@ model partner_reg_details {
   nagad_number        String?   @unique
   mothers_name_bangla String?
   fathers_name_bangla String?
-  user_id             String    @db.Uuid
+  user_id             String    @unique @db.Uuid
   nid_front_photo_url String?   @unique
   nid_back_photo_url  String?   @unique
   other_id_number     String?   @unique
@@ -71,7 +71,7 @@ model partner_reg_details {
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model account_details {
-  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id               String    @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   created_at       DateTime? @default(now()) @db.Timestamptz(6)
   mobile           String?   @unique
   email            String?   @unique
@@ -79,21 +79,21 @@ model account_details {
   present_address  String?
   country          String?
   photo_url        String?   @unique
-  user_id          String    @db.Uuid
   form_completed   Boolean   @default(false)
   account_verified Boolean   @default(false)
+  user_id          String    @unique @db.Uuid
   users            users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model users {
-  id                       String                     @id(map: "user_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  created_at               DateTime?                  @default(now()) @db.Timestamptz(6)
+  id                       String                    @id(map: "user_pkey") @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at               DateTime?                 @default(now()) @db.Timestamptz(6)
   full_name                String?
   type                     String?
-  account_details          account_details[]
+  account_details          account_details?
   driver_reg_details       driver_reg_details[]
-  partner_business_details partner_business_details[]
-  partner_reg_details      partner_reg_details[]
+  partner_business_details partner_business_details?
+  partner_reg_details      partner_reg_details?
 }
