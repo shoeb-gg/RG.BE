@@ -46,15 +46,15 @@ export class PartnerService {
     partnerId: string,
     partnerRegInfo: PartnerRegistrationDetailsDto,
   ): Promise<successResponse> {
-    const newPartnerReg: any = plainToClass(
+    const newPartnerReg = plainToClass(
       PartnerRegistrationDetailsDto,
       partnerRegInfo,
     );
 
     const updatedAccountDetails = {
       dob: partnerRegInfo.dob,
-      mobile: partnerRegInfo.mobile,
-      email: partnerRegInfo.email,
+      mobile: partnerRegInfo.mobile ? partnerRegInfo.mobile : null,
+      email: partnerRegInfo.email ? partnerRegInfo.email : null,
       form_completed: true,
     };
 
@@ -88,10 +88,7 @@ export class PartnerService {
     } catch (err) {
       console.log(err);
 
-      throw new HttpException(
-        'Error while Database Operation',
-        HttpStatus.FORBIDDEN,
-      );
+      throw new HttpException('Complete the Form!', HttpStatus.FORBIDDEN);
     }
   }
 
