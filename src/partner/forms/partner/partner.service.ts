@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 
 import { PrismaClient } from '@prisma/client';
@@ -10,22 +10,64 @@ import { PartnerBusinessDetailsDto } from 'src/common/dto/partner-business-detai
 export class PartnerService {
   private readonly prisma = new PrismaClient();
 
-  async getAccountDetails(partnerId: string): Promise<string> {
-    return partnerId + 'HI';
+  async getRegDetails(
+    partnerId: string,
+  ): Promise<PartnerRegistrationDetailsDto> {
+    try {
+      const regInfo = await this.prisma.partner_reg_details.findUnique({
+        where: {
+          user_id: partnerId,
+        },
+      });
+
+      const accountInfo = await this.prisma.account_details.findUnique({
+        where: {
+          user_id: partnerId,
+        },
+      });
+
+      const regData: PartnerRegistrationDetailsDto = {
+        ...regInfo,
+        mobile: accountInfo.mobile,
+        email: accountInfo.email,
+      };
+
+      return regData;
+    } catch {
+      throw new HttpException(
+        'Error while Database Operation',
+        HttpStatus.FORBIDDEN,
+      );
+    }
   }
 
-  async createAccountDetails(
-    partnerId: any,
+  async upsertRegDetails(
+    partnerId: string,
     partnerRegInfo: PartnerRegistrationDetailsDto,
   ): Promise<boolean> {
-    const newPartnerReg = plainToClass(
+    const newPartnerReg: any = plainToClass(
       PartnerRegistrationDetailsDto,
       partnerRegInfo,
     );
 
+    const updatedAccountDetails = {
+      dob: partnerRegInfo.dob,
+      mobile: partnerRegInfo.mobile,
+      email: partnerRegInfo.email,
+      form_completed: true,
+    };
+
+    console.log({ ...updatedAccountDetails });
+
     try {
-      await this.prisma.partner_reg_details.create({
-        data: {
+      await this.prisma.partner_reg_details.upsert({
+        where: {
+          user_id: partnerId,
+        },
+        update: {
+          ...newPartnerReg,
+        },
+        create: {
           Users: {
             connect: { id: partnerId },
           },
@@ -33,11 +75,19 @@ export class PartnerService {
         },
       });
 
+      await this.prisma.account_details.update({
+        where: {
+          user_id: partnerId,
+        },
+        data: { ...updatedAccountDetails },
+      });
+
       return true;
     } catch (err) {
-      console.log(err);
-
-      return false;
+      throw new HttpException(
+        'Error while Database Operation',
+        HttpStatus.FORBIDDEN,
+      );
     }
   }
 
