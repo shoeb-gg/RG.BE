@@ -5,6 +5,7 @@ import { PrismaClient } from '@prisma/client';
 
 import { PartnerRegistrationDetailsDto } from 'src/common/dto/partner-reg-details.dto';
 import { PartnerBusinessDetailsDto } from 'src/common/dto/partner-business-details.dto';
+import { successResponse } from 'src/common/models/res.success';
 
 @Injectable()
 export class PartnerService {
@@ -44,7 +45,7 @@ export class PartnerService {
   async upsertRegDetails(
     partnerId: string,
     partnerRegInfo: PartnerRegistrationDetailsDto,
-  ): Promise<boolean> {
+  ): Promise<successResponse> {
     const newPartnerReg: any = plainToClass(
       PartnerRegistrationDetailsDto,
       partnerRegInfo,
@@ -56,8 +57,6 @@ export class PartnerService {
       email: partnerRegInfo.email,
       form_completed: true,
     };
-
-    console.log({ ...updatedAccountDetails });
 
     try {
       await this.prisma.partner_reg_details.upsert({
@@ -82,8 +81,13 @@ export class PartnerService {
         data: { ...updatedAccountDetails },
       });
 
-      return true;
+      return {
+        message: 'Data Saved Successfully!',
+        status: HttpStatus.CREATED,
+      };
     } catch (err) {
+      console.log(err);
+
       throw new HttpException(
         'Error while Database Operation',
         HttpStatus.FORBIDDEN,
