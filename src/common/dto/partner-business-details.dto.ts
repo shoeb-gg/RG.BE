@@ -1,10 +1,17 @@
+import { Type } from 'class-transformer';
+import { IsNotEmpty } from 'class-validator';
+
 export class PartnerBusinessDetailsDto {
   id: any;
+  @IsNotEmpty()
   business_name: string;
-  business_id: string;
+  business_id?: string;
+  @IsNotEmpty()
   business_address: string;
-  business_start_date: Date;
+  @Type(() => Date)
+  business_start_date?: Date;
+  @IsNotEmpty()
   business_mobile: string;
-  //   user_id: string;
-  //   Users               users?    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  @IsNotEmpty()
+  trade_licence_photo_url: string;
 }
