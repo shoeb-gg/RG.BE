@@ -30,12 +30,19 @@ export class PartnerController {
     );
   }
 
+  @Get('business-details/:partnerId')
+  async getBusinessDetails(
+    @Param('partnerId') partnerId: string,
+  ): Promise<PartnerBusinessDetailsDto> {
+    return await this.partnerService.getBusinessDetails(partnerId);
+  }
+
   @Post('business-details/:partnerId')
-  async createBusinessDetails(
+  async upsertBusinessDetails(
     @Body() partnerBusinessInfo: PartnerBusinessDetailsDto,
-    @Param('partnerId') partnerId: any,
-  ): Promise<any> {
-    return await this.partnerService.createBusinessDetails(
+    @Param('partnerId') partnerId: string,
+  ): Promise<successResponse> {
+    return await this.partnerService.upsertBusinessDetails(
       partnerId,
       partnerBusinessInfo,
     );

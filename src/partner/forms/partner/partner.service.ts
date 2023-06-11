@@ -92,18 +92,44 @@ export class PartnerService {
     }
   }
 
-  async createBusinessDetails(
+  async getBusinessDetails(
+    partnerId: string,
+  ): Promise<PartnerBusinessDetailsDto> {
+    try {
+      const businessInfo =
+        await this.prisma.partner_business_details.findUnique({
+          where: {
+            user_id: partnerId,
+          },
+        });
+
+      return businessInfo;
+    } catch {
+      throw new HttpException(
+        'Error while Database Operation',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+  }
+
+  async upsertBusinessDetails(
     partnerId: any,
     partnerBusinessInfo: PartnerBusinessDetailsDto,
-  ): Promise<boolean> {
+  ): Promise<successResponse> {
     const newPartnerbusiness = plainToClass(
       PartnerBusinessDetailsDto,
       partnerBusinessInfo,
     );
 
     try {
-      await this.prisma.partner_business_details.create({
-        data: {
+      await this.prisma.partner_business_details.upsert({
+        where: {
+          user_id: partnerId,
+        },
+        update: {
+          ...newPartnerbusiness,
+        },
+        create: {
           Users: {
             connect: { id: partnerId },
           },
@@ -111,11 +137,14 @@ export class PartnerService {
         },
       });
 
-      return true;
+      return {
+        message: 'Data Saved Successfully!',
+        status: HttpStatus.CREATED,
+      };
     } catch (err) {
       console.log(err);
 
-      return false;
+      throw new HttpException('Complete the Form!', HttpStatus.FORBIDDEN);
     }
   }
 }
