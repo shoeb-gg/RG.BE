@@ -31,6 +31,7 @@ export class PartnerRegistrationDetailsDto {
   fathers_name_bangla?: string;
   nid_front_photo_url?: string;
   nid_back_photo_url?: string;
+  otherDocType?: string;
   other_id_number?: string;
   other_id_photo_url?: string;
   selfie_photo_url?: string;
