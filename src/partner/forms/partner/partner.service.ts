@@ -113,7 +113,7 @@ export class PartnerService {
   }
 
   async upsertBusinessDetails(
-    partnerId: any,
+    partnerId: string,
     partnerBusinessInfo: PartnerBusinessDetailsDto,
   ): Promise<successResponse> {
     const newPartnerbusiness = plainToClass(
