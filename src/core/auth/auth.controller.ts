@@ -14,12 +14,7 @@ import { RoleGuard } from '../jwt-roles/roles.guard';
 export class AuthController {
   constructor(private readonly auth: AuthService) {}
 
-  @Get()
-  async getUser(): Promise<any> {
-    return 0;
-  }
-
-  @Post()
+  @Post('registration')
   async createUser(@Body() userInfo: UserDto): Promise<any> {
     return await this.auth.createUser(userInfo);
   }
