@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { join } from 'path';
 
 import { CoreModule } from './core/core.module';
 import { PartnerModule } from './partner/partner.module';
