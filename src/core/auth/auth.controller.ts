@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 
 import { ApiTags } from '@nestjs/swagger';
 
@@ -32,4 +32,27 @@ export class AuthController {
   async GetAllUsers(): Promise<any> {
     return await this.auth.GetAllUsers();
   }
+
+  @Get('send-otp')
+  async SendOtp(@Query('to') to: any): Promise<any> {
+    const mobileNumber = 88 + to
+    return this.auth.SendOtp(mobileNumber)
+  }
+
+  // @Get('otp')
+  // async GetOtp (@Query('phoneNumber') phoneNumber:string):Promise<any>{
+  //   return await this.auth.GetOtp(phoneNumber);
+  // }
+
+  // @Post('test')
+  // async Test(@Query('name')name: any , @Query('mobile') mobile: any):Promise<any> {
+  //   console.log(mobile);
+  //   return await this.auth.Test(name,mobile)    
+  // }
+
+  // @Get('testsmsapi')
+  // async TestSms():Promise<any>{
+  //   return this.auth.TestSms()
+  // }
 }
+
