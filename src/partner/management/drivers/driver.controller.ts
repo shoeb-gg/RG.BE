@@ -15,7 +15,7 @@ import { DriverService } from './driver.service';
 import { DriverRegistrationDetailsDto } from 'src/common/dto/driver-reg-details.dto';
 
 @Controller('driver')
-@ApiTags('Driver Form')
+@ApiTags('Driver Management')
 export class DriverController {
   constructor(private readonly driverService: DriverService) {}
   //Create driver details
