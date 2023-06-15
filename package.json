@@ -23,7 +23,6 @@
   "dependencies": {
     "@fastify/static": "6.0.0",
     "@nestjs/axios": "^3.0.0",
-    "@nestjs/cli": "^9.0.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/jwt": "^10.0.3",

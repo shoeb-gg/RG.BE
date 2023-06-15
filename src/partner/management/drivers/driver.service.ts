@@ -82,7 +82,7 @@ export class DriverService {
         },
       });
       console.log(driversList);
-      return true
+      return true;
     } catch (error) {
       console.log(error);
       return false;

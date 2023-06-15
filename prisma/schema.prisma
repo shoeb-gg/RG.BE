@@ -13,9 +13,7 @@ model driver_reg_details {
   full_name         String
   dob               DateTime  @db.Date
   age               Int       @db.SmallInt
-  tenure            Int?
   experience        Int
-  license_number    String    @unique
   license_photo_url String    @unique
   driver_photo_url  String    @unique
   user_id           String    @db.Uuid
@@ -98,4 +96,28 @@ model users {
   driver_reg_details       driver_reg_details[]
   partner_business_details partner_business_details?
   partner_reg_details      partner_reg_details?
+  vehicle_reg_details      vehicle_reg_details[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model vehicle_reg_details {
+  id                         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at                 DateTime @default(now()) @db.Timestamptz(6)
+  vehicle_type               String
+  vehicle_brand              String
+  vehicle_number_plate       String
+  year                       Int      @db.SmallInt
+  color                      String
+  number_of_seats            Int      @db.SmallInt
+  engine_type                String
+  mileage                    Int
+  condition                  String
+  vehicle_front_photo_url    String   @unique
+  vehicle_back_photo_url     String   @unique
+  vehicle_left_photo_url     String   @unique
+  vehicle_right_photo_url    String   @unique
+  vehicle_interior_photo_url String   @unique
+  user_id                    String?  @db.Uuid
+  users                      users?   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
