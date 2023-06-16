@@ -39,6 +39,11 @@ export class AuthController {
     return this.auth.SendOtp(mobileNumber)
   }
 
+  @Get('register-otp')
+  async UserRegistrationOtpSend(@Query('to') to:any, @Query('full_name') full_name:any):Promise<any>{
+    return this.auth.UserRegistrationOtpSend(to,full_name)
+  }
+
   // @Get('otp')
   // async GetOtp (@Query('phoneNumber') phoneNumber:string):Promise<any>{
   //   return await this.auth.GetOtp(phoneNumber);
