@@ -1,5 +1,4 @@
 import {
-  Body,
   Controller,
   Get,
   Param,
@@ -11,8 +10,6 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
-
-import { UserDto } from 'src/common/dto/user.dto';
 import { JwtAuthGuard } from '../jwt-roles/jwt-auth.guard';
 import { Roles } from '../jwt-roles/roles.decorator';
 import { RoleGuard } from '../jwt-roles/roles.guard';
@@ -20,20 +17,10 @@ import { RoleGuard } from '../jwt-roles/roles.guard';
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly auth: AuthService) {}
-
-  @Post('registration')
-  async createUser(@Body() userInfo: UserDto): Promise<any> {
-    return await this.auth.createUser(userInfo);
-  }
-
-  @Post('login')
-  async UserLogin(@Body() BodyData: UserDto): Promise<any> {
-    return await this.auth.UserLogin(BodyData);
-  }
+  constructor(private readonly auth: AuthService) { }
 
   //localhost:1111/api/auth/allusers
-  //Using Jwt Guard Admin
+  //Using Jwt Guard "User"
   @Roles('user')
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Get('allusers')
@@ -41,13 +28,11 @@ export class AuthController {
     return await this.auth.GetAllUsers();
   }
 
-  @Get('send-otp')
-  async SendOtp(@Query('to') to: any): Promise<any> {
-    const mobileNumber = 88 + to;
-    return this.auth.SendOtp(mobileNumber);
-  }
 
-  @Get('register-otp')
+  //User register api to send otp
+  //example of api - Here we use query data
+  //url+/auth/register?to=01846970209&full_name=khalid hasan Sagar
+  @Get('register')
   async UserRegistrationOtpSend(
     @Query('to') to: any,
     @Query('full_name') full_name: any,
@@ -55,8 +40,10 @@ export class AuthController {
     return this.auth.UserRegistrationOtpSend(to, full_name);
   }
 
-  //Verify and register user
-  @Post('verify-otp/:mobile/:name/:otp')
+  //Verify and register user in system
+   //example of api - Here we use params data
+  //url+/auth/register/verify-otp/01846970209/khalid hasan Sagar/319764
+  @Post('register/verify-otp/:mobile/:name/:otp')
   async VerifyOtpAndRegister(
     @Param('mobile') mobile: any,
     @Param('name') name: any,
@@ -65,19 +52,20 @@ export class AuthController {
     return this.auth.VerifyOtpAndRegister(mobile, name, otp);
   }
 
-  // @Get('otp')
-  // async GetOtp (@Query('phoneNumber') phoneNumber:string):Promise<any>{
-  //   return await this.auth.GetOtp(phoneNumber);
-  // }
+  //User login api to send otp
+  //example of api - Here we use query data
+  //url+/auth/login?to=01846970209
+  @Get('login')
+  async UserLoginOtpSend(@Query('to') to: any): Promise<any> {
+    return this.auth.UserLoginOtpSend(to)
+  }
 
-  // @Post('test')
-  // async Test(@Query('name')name: any , @Query('mobile') mobile: any):Promise<any> {
-  //   console.log(mobile);
-  //   return await this.auth.Test(name,mobile)
-  // }
+  //Verify and Login User and Fetch their Data
+  //example of api - Here we use params data
+  ///auth/login/verify-otp/01846970209/176478
+  @Post('/login/verify-otp/:mobile/:otp')
+  async VerifyOtpAndLogin(@Param('mobile') mobile: any, @Param('otp') otp: any,): Promise<any> {
+    return this.auth.VerifyOtpAndLogin(mobile, otp)
+  }
 
-  // @Get('testsmsapi')
-  // async TestSms():Promise<any>{
-  //   return this.auth.TestSms()
-  // }
 }
