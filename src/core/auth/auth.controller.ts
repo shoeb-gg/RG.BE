@@ -55,6 +55,7 @@ export class AuthController {
     return this.auth.UserRegistrationOtpSend(to, full_name);
   }
 
+  //Verify and register user
   @Post('verify-otp/:mobile/:name/:otp')
   async VerifyOtpAndRegister(
     @Param('mobile') mobile: any,

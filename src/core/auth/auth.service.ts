@@ -179,7 +179,7 @@ export class AuthService {
 
   async VerifyOtpAndRegister(mobile: any, name: any, otp: any): Promise<any> {
     try {
-      //take user input otp
+      //take user input otp first
       const userInputOtp = otp;
       //check mobile number's row for otp
       const mobileNumberheckInOtp = await this.prisma.otp.findUnique({
