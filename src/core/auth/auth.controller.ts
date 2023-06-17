@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 
 import { ApiTags } from '@nestjs/swagger';
 
@@ -35,13 +43,25 @@ export class AuthController {
 
   @Get('send-otp')
   async SendOtp(@Query('to') to: any): Promise<any> {
-    const mobileNumber = 88 + to
-    return this.auth.SendOtp(mobileNumber)
+    const mobileNumber = 88 + to;
+    return this.auth.SendOtp(mobileNumber);
   }
 
   @Get('register-otp')
-  async UserRegistrationOtpSend(@Query('to') to:any, @Query('full_name') full_name:any):Promise<any>{
-    return this.auth.UserRegistrationOtpSend(to,full_name)
+  async UserRegistrationOtpSend(
+    @Query('to') to: any,
+    @Query('full_name') full_name: any,
+  ): Promise<any> {
+    return this.auth.UserRegistrationOtpSend(to, full_name);
+  }
+
+  @Post('verify-otp/:mobile/:name/:otp')
+  async VerifyOtpAndRegister(
+    @Param('mobile') mobile: any,
+    @Param('name') name: any,
+    @Param('otp') otp: any,
+  ): Promise<any> {
+    return this.auth.VerifyOtpAndRegister(mobile, name, otp);
   }
 
   // @Get('otp')
@@ -52,7 +72,7 @@ export class AuthController {
   // @Post('test')
   // async Test(@Query('name')name: any , @Query('mobile') mobile: any):Promise<any> {
   //   console.log(mobile);
-  //   return await this.auth.Test(name,mobile)    
+  //   return await this.auth.Test(name,mobile)
   // }
 
   // @Get('testsmsapi')
@@ -60,4 +80,3 @@ export class AuthController {
   //   return this.auth.TestSms()
   // }
 }
-
