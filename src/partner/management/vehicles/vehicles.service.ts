@@ -13,7 +13,7 @@ export class VehiclesService {
 
   async getAllVehicles(partnerId: string): Promise<VehicleListDto[]> {
     try {
-      const vehicleInfo: VehicleListDto[] =
+      const vehicleList: VehicleListDto[] =
         await this.prisma.vehicle_reg_details.findMany({
           where: {
             user_id: partnerId,
@@ -26,7 +26,7 @@ export class VehiclesService {
           },
         });
 
-      return vehicleInfo;
+      return vehicleList;
     } catch {
       throw new HttpException(
         'Error while Database Operation',
@@ -97,9 +97,10 @@ export class VehiclesService {
         status: HttpStatus.CREATED,
       };
     } catch (err) {
-      console.log(err);
-
-      throw new HttpException('Complete the Form!', HttpStatus.FORBIDDEN);
+      throw new HttpException(
+        'Error in Database Operation!',
+        HttpStatus.FORBIDDEN,
+      );
     }
   }
 
@@ -116,8 +117,6 @@ export class VehiclesService {
         status: HttpStatus.CREATED,
       };
     } catch (err) {
-      console.log(err);
-
       throw new HttpException(
         'Error in Database Operation!',
         HttpStatus.FORBIDDEN,
