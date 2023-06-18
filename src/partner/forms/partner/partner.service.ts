@@ -6,6 +6,7 @@ import { PrismaClient } from '@prisma/client';
 import { PartnerRegistrationDetailsDto } from 'src/common/dto/partner-reg-details.dto';
 import { PartnerBusinessDetailsDto } from 'src/common/dto/partner-business-details.dto';
 import { successResponse } from 'src/common/models/res.success';
+import { AccountDetailsDto } from 'src/common/dto/account-details.dto';
 
 @Injectable()
 export class PartnerService {
@@ -58,6 +59,10 @@ export class PartnerService {
       form_completed: true,
     };
 
+    const updateAccountForm = plainToClass(
+      AccountDetailsDto,updatedAccountDetails
+    )
+
     try {
       await this.prisma.partner_reg_details.upsert({
         where: {
@@ -78,7 +83,7 @@ export class PartnerService {
         where: {
           user_id: partnerId,
         },
-        data: { ...updatedAccountDetails },
+        data: { ...updateAccountForm },
       });
 
       return {

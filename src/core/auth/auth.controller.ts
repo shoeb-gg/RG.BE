@@ -13,6 +13,7 @@ import { AuthService } from './auth.service';
 import { JwtAuthGuard } from '../jwt-roles/jwt-auth.guard';
 import { Roles } from '../jwt-roles/roles.decorator';
 import { RoleGuard } from '../jwt-roles/roles.guard';
+import { User } from 'src/common/decorators/user.decorator';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -66,6 +67,12 @@ export class AuthController {
   @Post('/login/verify-otp/:mobile/:otp')
   async VerifyOtpAndLogin(@Param('mobile') mobile: any, @Param('otp') otp: any,): Promise<any> {
     return this.auth.VerifyOtpAndLogin(mobile, otp)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('current-user')
+  async LoggedInUser (@User() user):Promise<any>{
+    return this.auth.LoggedInUser(user)
   }
 
 }
