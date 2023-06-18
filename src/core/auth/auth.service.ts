@@ -282,11 +282,6 @@ export class AuthService {
     return await this.prisma.users.findUnique({
       where:{
         id:user.userId
-      },
-      include:{
-        account_details:true,
-        partner_reg_details:true,
-        driver_reg_details:true
       }
     })
   }
