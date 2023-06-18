@@ -4,64 +4,67 @@ import {
   Delete,
   Get,
   Param,
-  Patch,
   Post,
-  Response,
+  Put,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { DriverService } from './driver.service';
 
 import { DriverRegistrationDetailsDto } from 'src/common/dto/driver-reg-details.dto';
+import { DriverListDto } from 'src/common/dto/driver-list.dto';
+import { successResponse } from 'src/common/models/res.success';
 
-@Controller('driver')
+@Controller('drivers')
 @ApiTags('Driver Management')
 export class DriverController {
   constructor(private readonly driverService: DriverService) {}
+
+  //Get Drivers list based on partnerId
+  //http://localhost:1111/api/driver/all-driver-list/:partnerId
+  @Get('all/:partnerId')
+  async getAllDrivers(
+    @Param('partnerId') partnerId: string,
+  ): Promise<DriverListDto[]> {
+    return await this.driverService.getAllDrivers(partnerId);
+  }
+
+  //Single driver details
+  //http://localhost:1111/api/driver/driver-reg-details/driverId
+  @Get(':driverId')
+  async getSingleDriver(@Param('driverId') driverId: string): Promise<any> {
+    return await this.driverService.getSingleDriver(driverId);
+  }
+
   //Create driver details
   //http://localhost:1111/api/driver/driver-reg-details/partnerId
-  @Post('driver-reg-details/:partnerId')
-  async createDriverDetails(
+  @Post(':partnerId')
+  async createDriver(
     @Body() DriverRegistrationDetails: DriverRegistrationDetailsDto,
-    @Param('partnerId') partnerId: any,
-  ): Promise<any> {
-    return await this.driverService.createDriverDetails(
+    @Param('partnerId') partnerId: string,
+  ): Promise<successResponse> {
+    return await this.driverService.createDriver(
       partnerId,
       DriverRegistrationDetails,
     );
   }
 
-  //Delete driver details
-  //http://localhost:1111/api/driver/delete/driver-reg-details/:driverId
-  @Delete('delete/driver-reg-details/:driverId')
-  async deleteDriverDetails(@Param('driverId') driverId: any): Promise<any> {
-    return await this.driverService.deleteDriverDetails(driverId);
-  }
-
   //Update driver details
   //http://localhost:1111/api/driver/update/driver-reg-details/:driverId
-  @Patch('update/driver-reg-details/:driverId')
-  async updateDriverDetails(
-    @Body() DriverUpdatedRegistrationDetails,
-    @Param('driverId') driverId: any,
-  ): Promise<any> {
-    return await this.driverService.updateDriverDetails(
-      driverId,
-      DriverUpdatedRegistrationDetails,
-    );
+  @Put(':driverId')
+  async updateDriver(
+    @Body() DriverInfo: DriverRegistrationDetailsDto,
+    @Param('driverId') driverId: string,
+  ): Promise<successResponse> {
+    return await this.driverService.updateDriver(driverId, DriverInfo);
   }
 
-  //Get Drivers list based on partnerId
-  //http://localhost:1111/api/driver/all-driver-list/:partnerId
-  @Get('all-driver-list/:partnerId')
-  async getDriversList(@Param('partnerId') partnerId: any): Promise<any> {
-    return await this.driverService.getDriversList(partnerId);
-  }
-
-  //Single driver details
-  //http://localhost:1111/api/driver/driver-reg-details/driverId
-  @Get('driver-reg-details/:driverId')
-  async getSingleDriverDetils(@Param('driverId') driverId: any): Promise<any> {
-    return await this.driverService.getSingleDriverDetils(driverId);
+  //Delete driver details
+  //http://localhost:1111/api/driver/delete/driver-reg-details/:driverId
+  @Delete(':driverId')
+  async deleteDriver(
+    @Param('driverId') driverId: string,
+  ): Promise<successResponse> {
+    return await this.driverService.deleteDriver(driverId);
   }
 }

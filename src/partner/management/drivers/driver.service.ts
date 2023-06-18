@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 
 import { PrismaClient } from '@prisma/client';
 
 import { DriverRegistrationDetailsDto } from 'src/common/dto/driver-reg-details.dto';
+import { DriverListDto } from 'src/common/dto/driver-list.dto';
+import { successResponse } from 'src/common/models/res.success';
 
 @Injectable()
 export class DriverService {
@@ -11,97 +13,119 @@ export class DriverService {
 
   //Driver registration by partner
   //Create driver details
-  async createDriverDetails(
-    partnerId: any,
+  async createDriver(
+    partnerId: string,
     DriverRegistrationDetails: DriverRegistrationDetailsDto,
-  ): Promise<boolean> {
-    const newDriverReg = plainToClass(
+  ): Promise<successResponse> {
+    const newDriver = plainToClass(
       DriverRegistrationDetailsDto,
       DriverRegistrationDetails,
     );
     try {
       await this.prisma.driver_reg_details.create({
         data: {
-          Users: {
-            connect: { id: partnerId },
-          },
-          ...newDriverReg,
+          user_id: partnerId,
+          ...newDriver,
         },
       });
-      return true;
-    } catch (error) {
-      console.log(error);
-      return false;
-    }
-  }
+      return {
+        message: 'Data Saved Successfully!',
+        status: HttpStatus.CREATED,
+      };
+    } catch (err) {
+      console.log(err);
 
-  //Delete driver detials
-  async deleteDriverDetails(driverId: any): Promise<boolean> {
-    try {
-      await this.prisma.driver_reg_details.delete({
-        where: {
-          id: driverId,
-        },
-      });
-      return true;
-    } catch (error) {
-      console.log(error);
-      return false;
+      throw new HttpException('Complete the Form!', HttpStatus.FORBIDDEN);
     }
   }
 
   //Update driver details
-  async updateDriverDetails(
-    driverId: any,
-    DriverUpdatedRegistrationDetails: DriverRegistrationDetailsDto,
-  ): Promise<boolean> {
-    const updateDriver = plainToClass(
+  async updateDriver(
+    driverId: string,
+    DriverInfo: DriverRegistrationDetailsDto,
+  ): Promise<successResponse> {
+    const updatedDriver = plainToClass(
       DriverRegistrationDetailsDto,
-      DriverUpdatedRegistrationDetails,
+      DriverInfo,
     );
     try {
       await this.prisma.driver_reg_details.update({
         where: {
           id: driverId,
         },
-        data: updateDriver,
+        data: { ...updatedDriver },
       });
-      return true;
-    } catch (error) {
-      console.log(error);
-      return false;
+      return {
+        message: 'Data Saved Successfully!',
+        status: HttpStatus.CREATED,
+      };
+    } catch (err) {
+      throw new HttpException(
+        'Error in Database Operation!',
+        HttpStatus.FORBIDDEN,
+      );
     }
   }
 
   //All drivers list based on partnerId
-  async getDriversList(partnerId: any): Promise<boolean> {
+  async getAllDrivers(partnerId: string): Promise<DriverListDto[]> {
     try {
-      const driversList = await this.prisma.driver_reg_details.findMany({
-        where: {
-          user_id: partnerId,
-        },
-      });
-      console.log(driversList);
-      return true;
+      const driversList: DriverListDto[] =
+        await this.prisma.driver_reg_details.findMany({
+          where: {
+            user_id: partnerId,
+          },
+          select: {
+            id: true,
+            full_name: true,
+            experience: true,
+          },
+        });
+
+      return driversList;
     } catch (error) {
-      console.log(error);
-      return false;
+      throw new HttpException(
+        'Error while Database Operation',
+        HttpStatus.FORBIDDEN,
+      );
     }
   }
 
   //Get a single driver details
-  async getSingleDriverDetils(driverId: any): Promise<boolean> {
+  async getSingleDriver(driverId: any): Promise<DriverRegistrationDetailsDto> {
     try {
-      const driverDetails = await this.prisma.driver_reg_details.findFirst({
+      const driverDetails: DriverRegistrationDetailsDto =
+        await this.prisma.driver_reg_details.findUnique({
+          where: {
+            id: driverId,
+          },
+        });
+      return driverDetails;
+    } catch (error) {
+      throw new HttpException(
+        'Error while Database Operation',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+  }
+
+  //Delete driver detials
+  async deleteDriver(driverId: any): Promise<successResponse> {
+    try {
+      await this.prisma.driver_reg_details.delete({
         where: {
           id: driverId,
         },
       });
-      console.log(driverDetails);
-      return true;
-    } catch (error) {
-      console.log(error);
-      return false;
+      return {
+        message: 'Data Deleted Successfully!',
+        status: HttpStatus.CREATED,
+      };
+    } catch (err) {
+      throw new HttpException(
+        'Error in Database Operation!',
+        HttpStatus.FORBIDDEN,
+      );
     }
   }
 }

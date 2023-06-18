@@ -16,7 +16,7 @@ import { VehicleDetailsDto } from 'src/common/dto/vehicle-details.dto';
 import { VehicleListDto } from 'src/common/dto/vehicle-list.dto';
 
 @Controller('vehicles')
-@ApiTags('Vehicle Registration')
+@ApiTags('Vehicle Management')
 export class VehiclesController {
   constructor(private readonly vehiclesService: VehiclesService) {}
 
