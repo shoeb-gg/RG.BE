@@ -255,10 +255,11 @@ export class AuthService {
           }
         })
         //Here, we collect user mobile + email + type to generate jwt token . type for check user type to use in auth guard
+        const userId = UserData.user_id
         const mobileNumber = UserData.mobile;
         const email = UserData.email;
         const type = UserData.users.type;
-        const payload = { mobileNumber, email, type };
+        const payload = { userId,mobileNumber, email, type };
         //jwt token generate
         const access_token = this.JwtService.sign(payload);
         return {
@@ -275,5 +276,13 @@ export class AuthService {
         HttpStatus.FORBIDDEN,
       );
     }
+  }
+
+  async LoggedInUser(user:any):Promise<any>{
+    return await this.prisma.users.findUnique({
+      where:{
+        id:user.userId
+      }
+    })
   }
 }
