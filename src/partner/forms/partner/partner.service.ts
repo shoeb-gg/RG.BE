@@ -38,7 +38,7 @@ export class PartnerService {
     } catch {
       throw new HttpException(
         'Error while Database Operation',
-        HttpStatus.FORBIDDEN,
+        HttpStatus.NOT_FOUND,
       );
     }
   }
@@ -60,8 +60,9 @@ export class PartnerService {
     };
 
     const updateAccountForm = plainToClass(
-      AccountDetailsDto,updatedAccountDetails
-    )
+      AccountDetailsDto,
+      updatedAccountDetails,
+    );
 
     try {
       await this.prisma.partner_reg_details.upsert({
