@@ -1,8 +1,4 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { PrismaClient } from '@prisma/client';
@@ -16,7 +12,7 @@ export class AuthService {
   constructor(
     private JwtService: JwtService,
     private readonly httpService: HttpService,
-  ) { }
+  ) {}
   private readonly prisma = new PrismaClient();
 
   async GetAllUsers(): Promise<any> {
@@ -24,8 +20,7 @@ export class AuthService {
     return users;
   }
 
-
-//User Registration with mobile number . Then Send Otp and save to db
+  //User Registration with mobile number . Then Send Otp and save to db
   async UserRegistrationOtpSend(to: any, full_name: string): Promise<any> {
     //generate otp code
     const NewGeneratedOtp = GenerateOtp();
@@ -144,19 +139,18 @@ export class AuthService {
           const access_token = this.JwtService.sign(payload);
           return {
             createUser,
-            createUserAccount,
             access_token,
           };
         } else {
           return false;
         }
       } else {
-        return { message: 'Wrong Otp or Mobile Number' };
+        return { message: 'Wrong Otp' };
       }
     } catch (error) {
       throw new HttpException(
-        'Account Exist Or Server Error Try Again',
-        HttpStatus.FORBIDDEN,
+        'Server Error! Try Again',
+        HttpStatus.NOT_ACCEPTABLE,
       );
     }
   }
@@ -216,10 +210,7 @@ export class AuthService {
           .pipe(map((response) => response.data));
       }
     } catch (error) {
-      throw new HttpException(
-        ' Server Error Try Again',
-        HttpStatus.FORBIDDEN,
-      );
+      throw new HttpException(' Server Error Try Again', HttpStatus.FORBIDDEN);
     }
   }
 
@@ -248,27 +239,27 @@ export class AuthService {
         //fetch user account details based on mobile number
         const UserData = await this.prisma.account_details.findFirst({
           where: {
-            mobile: mobile
+            mobile: mobile,
           },
           include: {
-            users: true
-          }
-        })
+            users: true,
+          },
+        });
         //Here, we collect user mobile + email + type to generate jwt token . type for check user type to use in auth guard
-        const userId = UserData.user_id
+        const userId = UserData.user_id;
         const mobileNumber = UserData.mobile;
         const email = UserData.email;
         const type = UserData.users.type;
-        const payload = { userId,mobileNumber, email, type };
+        const payload = { userId, mobileNumber, email, type };
         //jwt token generate
         const access_token = this.JwtService.sign(payload);
         return {
           message: `Hello ${UserData.users.full_name} Welcome`,
           UserData,
-          access_token
-        }
+          access_token,
+        };
       } else {
-        return false
+        return false;
       }
     } catch (error) {
       throw new HttpException(
@@ -278,11 +269,11 @@ export class AuthService {
     }
   }
 
-  async LoggedInUser(user:any):Promise<any>{
+  async LoggedInUser(user: any): Promise<any> {
     return await this.prisma.users.findUnique({
-      where:{
-        id:user.userId
-      }
-    })
+      where: {
+        id: user.userId,
+      },
+    });
   }
 }
