@@ -120,7 +120,6 @@ export class AuthService {
               connect: { id: createUser.id },
             },
             mobile: mobile,
-            email: 'none',
           },
         });
         //if user and account create successfully , we are going to delete our otp from db . or it will cause unnacessary storage issue
