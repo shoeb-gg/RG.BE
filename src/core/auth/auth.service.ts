@@ -120,7 +120,7 @@ export class AuthService {
               connect: { id: createUser.id },
             },
             mobile: mobile,
-            email: ' ',
+            email: 'none',
           },
         });
         //if user and account create successfully , we are going to delete our otp from db . or it will cause unnacessary storage issue
@@ -148,6 +148,8 @@ export class AuthService {
         return { message: 'Wrong Otp' };
       }
     } catch (error) {
+      console.log(error);
+      
       throw new HttpException(
         'Server Error! Try Again',
         HttpStatus.NOT_ACCEPTABLE,
