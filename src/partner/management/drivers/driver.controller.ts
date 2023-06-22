@@ -21,7 +21,7 @@ export class DriverController {
   constructor(private readonly driverService: DriverService) {}
 
   //Get Drivers list based on partnerId
-  //http://localhost:1111/api/driver/all-driver-list/:partnerId
+  //http://localhost:1111/api/drivers/all/:partnerId
   @Get('all/:partnerId')
   async getAllDrivers(
     @Param('partnerId') partnerId: string,
@@ -30,14 +30,14 @@ export class DriverController {
   }
 
   //Single driver details
-  //http://localhost:1111/api/driver/driver-reg-details/driverId
+  //http://localhost:1111/api/drivers/driverId
   @Get(':driverId')
   async getSingleDriver(@Param('driverId') driverId: string): Promise<any> {
     return await this.driverService.getSingleDriver(driverId);
   }
 
   //Create driver details
-  //http://localhost:1111/api/driver/driver-reg-details/partnerId
+  //http://localhost:1111/api/drivers/partnerId
   @Post(':partnerId')
   async createDriver(
     @Body() DriverRegistrationDetails: DriverRegistrationDetailsDto,
@@ -50,7 +50,7 @@ export class DriverController {
   }
 
   //Update driver details
-  //http://localhost:1111/api/driver/update/driver-reg-details/:driverId
+  //http://localhost:1111/api/drivers/:driverId
   @Put(':driverId')
   async updateDriver(
     @Body() DriverInfo: DriverRegistrationDetailsDto,
@@ -60,7 +60,7 @@ export class DriverController {
   }
 
   //Delete driver details
-  //http://localhost:1111/api/driver/delete/driver-reg-details/:driverId
+  //http://localhost:1111/api/drivers/:driverId
   @Delete(':driverId')
   async deleteDriver(
     @Param('driverId') driverId: string,

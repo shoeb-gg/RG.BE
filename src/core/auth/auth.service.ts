@@ -53,7 +53,8 @@ export class AuthService {
           .get(process.env.SMS_API, {
             params: {
               to: to,
-              text: 'Your Otp Is ' + NewGeneratedOtp + ' Keep It Secret',
+              text: 'Your RG verification code is ' + NewGeneratedOtp + 
+              ' ~The RG Team',
               user: process.env.SMS_USER,
               password: process.env.SMS_PASSWORD,
             },
@@ -73,7 +74,8 @@ export class AuthService {
           .get(process.env.SMS_API, {
             params: {
               to: to,
-              text: 'Your Otp Is ' + NewGeneratedOtp + ' Keep It Secret',
+              text: 'Your RG verification code is ' + NewGeneratedOtp + 
+              ' ~The RG Team',
               user: process.env.SMS_USER,
               password: process.env.SMS_PASSWORD,
             },
@@ -185,7 +187,8 @@ export class AuthService {
           .get(process.env.SMS_API, {
             params: {
               to: to,
-              text: 'Your Otp Is ' + NewGeneratedOtp + ' Keep It Secret',
+              text: 'Your RG verification code is ' + NewGeneratedOtp + 
+              ' ~The RG Team',
               user: process.env.SMS_USER,
               password: process.env.SMS_PASSWORD,
             },
@@ -204,7 +207,8 @@ export class AuthService {
           .get(process.env.SMS_API, {
             params: {
               to: to,
-              text: 'Your Otp Is ' + NewGeneratedOtp + ' Keep It Secret',
+              text: 'Your RG verification code is ' + NewGeneratedOtp + 
+              ' ~The RG Team',
               user: process.env.SMS_USER,
               password: process.env.SMS_PASSWORD,
             },
