@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { PartnerRegistrationDetailsDto } from 'src/common/dto/partner-reg-details.dto';
@@ -6,44 +6,51 @@ import { PartnerBusinessDetailsDto } from 'src/common/dto/partner-business-detai
 
 import { PartnerService } from './partner.service';
 import { successResponse } from 'src/common/models/res.success';
+import { Roles } from 'src/core/jwt-roles/roles.decorator';
+import { JwtAuthGuard } from 'src/core/jwt-roles/jwt-auth.guard';
+import { RoleGuard } from 'src/core/jwt-roles/roles.guard';
+import { User } from 'src/common/decorators/user.decorator';
 
 @Controller('partner')
 @ApiTags('Partner Registration')
 export class PartnerController {
-  constructor(private readonly partnerService: PartnerService) {}
+  constructor(private readonly partnerService: PartnerService) { }
 
-  @Get('reg-details/:partnerId')
-  async getRegDetails(
-    @Param('partnerId') partnerId: string,
+  @Roles('user')
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Get('reg-details')
+  async getRegDetails(@User() user
   ): Promise<PartnerRegistrationDetailsDto> {
-    return await this.partnerService.getRegDetails(partnerId);
+    return await this.partnerService.getRegDetails(user.userId);
   }
-
-  @Post('reg-details/:partnerId')
+  @Roles('user')
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Post('reg-details')
   async upsertRegDetails(
-    @Body() partnerRegInfo: PartnerRegistrationDetailsDto,
-    @Param('partnerId') partnerId: string,
+    @Body() partnerRegInfo: PartnerRegistrationDetailsDto, @User() user
   ): Promise<successResponse> {
     return await this.partnerService.upsertRegDetails(
-      partnerId,
+      user.userId,
       partnerRegInfo,
     );
   }
-
-  @Get('business-details/:partnerId')
+  @Roles('user')
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Get('business-details')
   async getBusinessDetails(
-    @Param('partnerId') partnerId: string,
+    @User() user
   ): Promise<PartnerBusinessDetailsDto> {
-    return await this.partnerService.getBusinessDetails(partnerId);
+    return await this.partnerService.getBusinessDetails(user.userId);
   }
-
-  @Post('business-details/:partnerId')
+  @Roles('user')
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Post('business-details')
   async upsertBusinessDetails(
     @Body() partnerBusinessInfo: PartnerBusinessDetailsDto,
-    @Param('partnerId') partnerId: string,
+    @User() user
   ): Promise<successResponse> {
     return await this.partnerService.upsertBusinessDetails(
-      partnerId,
+      user.userId,
       partnerBusinessInfo,
     );
   }
