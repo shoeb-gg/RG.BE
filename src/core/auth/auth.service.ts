@@ -53,8 +53,10 @@ export class AuthService {
           .get(process.env.SMS_API, {
             params: {
               to: to,
-              text: 'Your RG verification code is ' + NewGeneratedOtp + 
-              ' ~The RG Team',
+              text:
+                'Your RG verification code is ' +
+                NewGeneratedOtp +
+                ' ~The RG Team',
               user: process.env.SMS_USER,
               password: process.env.SMS_PASSWORD,
             },
@@ -74,8 +76,10 @@ export class AuthService {
           .get(process.env.SMS_API, {
             params: {
               to: to,
-              text: 'Your RG verification code is ' + NewGeneratedOtp + 
-              ' ~The RG Team',
+              text:
+                'Your RG verification code is ' +
+                NewGeneratedOtp +
+                ' ~The RG Team',
               user: process.env.SMS_USER,
               password: process.env.SMS_PASSWORD,
             },
@@ -136,7 +140,7 @@ export class AuthService {
           const mobile = createUserAccount.mobile;
           const email = createUserAccount.email;
           const type = createUser.type;
-          const payload = { userId,mobile, email, type };
+          const payload = { userId, mobile, email, type };
           //jwt token generate
           const access_token = this.JwtService.sign(payload);
           return {
@@ -151,7 +155,7 @@ export class AuthService {
       }
     } catch (error) {
       console.log(error);
-      
+
       throw new HttpException(
         'Server Error! Try Again',
         HttpStatus.NOT_ACCEPTABLE,
@@ -187,8 +191,10 @@ export class AuthService {
           .get(process.env.SMS_API, {
             params: {
               to: to,
-              text: 'Your RG verification code is ' + NewGeneratedOtp + 
-              ' ~The RG Team',
+              text:
+                'Your RG verification code is ' +
+                NewGeneratedOtp +
+                ' ~The RG Team',
               user: process.env.SMS_USER,
               password: process.env.SMS_PASSWORD,
             },
@@ -207,8 +213,10 @@ export class AuthService {
           .get(process.env.SMS_API, {
             params: {
               to: to,
-              text: 'Your RG verification code is ' + NewGeneratedOtp + 
-              ' ~The RG Team',
+              text:
+                'Your RG verification code is ' +
+                NewGeneratedOtp +
+                ' ~The RG Team',
               user: process.env.SMS_USER,
               password: process.env.SMS_PASSWORD,
             },
@@ -276,8 +284,6 @@ export class AuthService {
   }
 
   async LoggedInUser(user: any): Promise<any> {
-    console.log(user);
-    
     return await this.prisma.users.findUnique({
       where: {
         id: user.userId,

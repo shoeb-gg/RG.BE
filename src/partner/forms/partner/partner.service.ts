@@ -26,12 +26,25 @@ export class PartnerService {
         where: {
           user_id: partnerId,
         },
+        select: {
+          mobile: true,
+          email: true,
+        },
+      });
+
+      const name = await this.prisma.users.findUnique({
+        where: {
+          id: partnerId,
+        },
+        select: {
+          full_name: true,
+        },
       });
 
       const regData: PartnerRegistrationDetailsDto = {
         ...regInfo,
-        mobile: accountInfo.mobile,
-        email: accountInfo.email,
+        ...accountInfo,
+        ...name,
       };
 
       return regData;
@@ -85,6 +98,12 @@ export class PartnerService {
           user_id: partnerId,
         },
         data: { ...updateAccountForm },
+      });
+      await this.prisma.users.update({
+        where: {
+          id: partnerId,
+        },
+        data: { full_name: partnerRegInfo.full_name },
       });
 
       return {
