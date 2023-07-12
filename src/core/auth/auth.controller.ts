@@ -4,6 +4,7 @@ import {
   Param,
   Post,
   Query,
+  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 
@@ -42,7 +43,7 @@ export class AuthController {
   }
 
   //Verify and register user in system
-   //example of api - Here we use params data
+  //example of api - Here we use params data
   //url+/auth/register/verify-otp/01846970209/khalid hasan Sagar/319764
   @Post('register/verify-otp/:mobile/:name/:otp')
   async VerifyOtpAndRegister(
@@ -69,10 +70,16 @@ export class AuthController {
     return this.auth.VerifyOtpAndLogin(mobile, otp)
   }
 
+  //throw unauthorize = 401 error . app interceptor can catch 401 and it will same like jwt expire token.
   @UseGuards(JwtAuthGuard)
-  @Get('current-user')
-  async LoggedInUser (@User() user):Promise<any>{
-    return this.auth.LoggedInUser(user)
+  @Get('logout')
+  async Logout() {
+    throw new UnauthorizedException()
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get('current-user')
+  async LoggedInUser(@User() user): Promise<any> {
+    return this.auth.LoggedInUser(user)
+  }
 }
