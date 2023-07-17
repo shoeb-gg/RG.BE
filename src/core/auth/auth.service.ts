@@ -273,7 +273,7 @@ export class AuthService {
           access_token,
         };
       } else {
-        return false;
+        return { message: 'Wrong Otp' };
       }
     } catch (error) {
       throw new HttpException(
