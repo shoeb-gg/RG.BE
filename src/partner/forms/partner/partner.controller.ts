@@ -14,20 +14,20 @@ import { User } from 'src/common/decorators/user.decorator';
 @Controller('partner')
 @ApiTags('Partner Registration')
 export class PartnerController {
-  constructor(private readonly partnerService: PartnerService) { }
+  constructor(private readonly partnerService: PartnerService) {}
 
   @Roles('user')
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Get('reg-details')
-  async getRegDetails(@User() user
-  ): Promise<PartnerRegistrationDetailsDto> {
+  async getRegDetails(@User() user): Promise<PartnerRegistrationDetailsDto> {
     return await this.partnerService.getRegDetails(user.userId);
   }
   @Roles('user')
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Post('reg-details')
   async upsertRegDetails(
-    @Body() partnerRegInfo: PartnerRegistrationDetailsDto, @User() user
+    @Body() partnerRegInfo: PartnerRegistrationDetailsDto,
+    @User() user,
   ): Promise<successResponse> {
     return await this.partnerService.upsertRegDetails(
       user.userId,
@@ -37,9 +37,7 @@ export class PartnerController {
   @Roles('user')
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Get('business-details')
-  async getBusinessDetails(
-    @User() user
-  ): Promise<PartnerBusinessDetailsDto> {
+  async getBusinessDetails(@User() user): Promise<PartnerBusinessDetailsDto> {
     return await this.partnerService.getBusinessDetails(user.userId);
   }
   @Roles('user')
@@ -47,7 +45,7 @@ export class PartnerController {
   @Post('business-details')
   async upsertBusinessDetails(
     @Body() partnerBusinessInfo: PartnerBusinessDetailsDto,
-    @User() user
+    @User() user,
   ): Promise<successResponse> {
     return await this.partnerService.upsertBusinessDetails(
       user.userId,

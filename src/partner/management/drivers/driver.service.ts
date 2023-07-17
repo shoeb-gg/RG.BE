@@ -118,7 +118,7 @@ export class DriverService {
         },
       });
       return {
-        message: 'Data Deleted Successfully!',
+        message: 'Driver Deleted Successfully!',
         status: HttpStatus.CREATED,
       };
     } catch (err) {

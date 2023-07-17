@@ -113,7 +113,7 @@ export class VehiclesService {
       });
 
       return {
-        message: 'Data Deleted Successfully!',
+        message: 'Vehicle Deleted Successfully!',
         status: HttpStatus.CREATED,
       };
     } catch (err) {
