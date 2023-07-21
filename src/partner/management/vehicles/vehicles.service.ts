@@ -6,6 +6,7 @@ import { PrismaClient } from '@prisma/client';
 import { successResponse } from 'src/common/models/res.success';
 import { VehicleDetailsDto } from 'src/common/dto/vehicle-details.dto';
 import { VehicleListDto } from 'src/common/dto/vehicle-list.dto';
+import { VehicleDocumentsDto } from 'src/common/dto/vehicle-documents.dto';
 
 @Injectable()
 export class VehiclesService {
@@ -121,6 +122,53 @@ export class VehiclesService {
         'Error in Database Operation!',
         HttpStatus.FORBIDDEN,
       );
+    }
+  }
+
+  async getVehicleDocuments(vehicleId: string): Promise<VehicleDocumentsDto> {
+    try {
+      const docs: VehicleDocumentsDto =
+        await this.prisma.vehicle_documents.findUnique({
+          where: {
+            vehicle_id: vehicleId,
+          },
+        });
+
+      return docs;
+    } catch {
+      throw new HttpException(
+        'Error while Database Operation',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+  }
+
+  async upsertVehicleDocuments(
+    vehicleId: string,
+    documentsContent: VehicleDocumentsDto,
+  ): Promise<successResponse> {
+    const documents = plainToClass(VehicleDocumentsDto, documentsContent);
+
+    try {
+      await this.prisma.vehicle_documents.upsert({
+        where: {
+          vehicle_id: vehicleId,
+        },
+        update: {
+          ...documents,
+        },
+        create: {
+          ...documents,
+          vehicle_id: vehicleId,
+        },
+      });
+
+      return {
+        message: 'Data Saved Successfully!',
+        status: HttpStatus.CREATED,
+      };
+    } catch (err) {
+      throw new HttpException('Complete the Form!', HttpStatus.FORBIDDEN);
     }
   }
 }
