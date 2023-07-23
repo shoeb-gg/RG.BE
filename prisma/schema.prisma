@@ -25,13 +25,14 @@ model driver_reg_details {
 model partner_business_details {
   id                      String    @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   created_at              DateTime? @default(now()) @db.Timestamptz(6)
-  business_name           String
+  business_name           String?
   business_id             String?   @unique
-  business_address        String
+  business_address        String?
   business_start_date     DateTime? @db.Date
-  business_mobile         String
+  business_mobile         String?
   user_id                 String    @unique @db.Uuid
-  trade_licence_photo_url String    @unique
+  trade_licence_photo_url String?   @unique
+  business_type           String
   Users                   users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
