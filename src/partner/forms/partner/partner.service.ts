@@ -146,6 +146,8 @@ export class PartnerService {
       partnerBusinessInfo,
     );
 
+    console.log(newPartnerbusiness);
+
     try {
       await this.prisma.partner_business_details.upsert({
         where: {

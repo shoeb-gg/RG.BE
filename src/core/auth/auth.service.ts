@@ -166,17 +166,22 @@ export class AuthService {
   //User login api with otp
   async UserLoginOtpSend(to: any): Promise<any> {
     const NewGeneratedOtp = GenerateOtp();
+    to = to;
+    console.log(to);
+
     try {
       const mobileNumberCheck = await this.prisma.account_details.findFirst({
         where: {
           mobile: to,
         },
       });
+
       const mobileCheckInOtp = await this.prisma.otp.findUnique({
         where: {
           mobile: to,
         },
       });
+
       if (!mobileNumberCheck) {
         return { message: 'User Not Registered . Please Register First' };
       } else if (mobileNumberCheck && !mobileCheckInOtp) {
@@ -186,6 +191,8 @@ export class AuthService {
             mobile: to,
           },
         });
+        console.log(NewGeneratedOtp);
+
         //send sms with otp to mobile number
         return this.httpService
           .get(process.env.SMS_API, {
@@ -201,6 +208,8 @@ export class AuthService {
           })
           .pipe(map((response) => response.data));
       } else if (mobileCheckInOtp) {
+        console.log(NewGeneratedOtp + 'hi');
+
         await this.prisma.otp.update({
           where: {
             mobile: to,
@@ -212,13 +221,13 @@ export class AuthService {
         return this.httpService
           .get(process.env.SMS_API, {
             params: {
-              to: to,
+              user: process.env.SMS_USER,
+              password: process.env.SMS_PASSWORD,
+              to: '88' + to,
               text:
                 'Your RG verification code is ' +
                 NewGeneratedOtp +
                 ' ~The RG Team',
-              user: process.env.SMS_USER,
-              password: process.env.SMS_PASSWORD,
             },
           })
           .pipe(map((response) => response.data));
