@@ -96,6 +96,7 @@ model users {
   account_details           account_details?
   driver_reg_details        driver_reg_details[]
   partner_business_details  partner_business_details?
+  partner_payment_details   partner_payment_details[]
   partner_reg_details       partner_reg_details?
   partner_vehicle_documents partner_vehicle_documents[]
   vehicle_reg_details       vehicle_reg_details[]
@@ -159,4 +160,18 @@ model vehicle_documents {
   vehicle_insurance_photo_url     String?              @unique
   vehicle_id                      String?              @unique @db.Uuid
   vehicle_reg_details             vehicle_reg_details? @relation(fields: [vehicle_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model partner_payment_details {
+  created_at                 DateTime? @default(now()) @db.Timestamptz(6)
+  account_type               String
+  mfs_number                 String?
+  bank_account_number        String?
+  bank_name                  String?
+  bank_branch_routing_number String?
+  user_id                    String?   @db.Uuid
+  id                         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  users                      users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
