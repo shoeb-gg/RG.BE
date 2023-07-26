@@ -6,10 +6,12 @@ import { VehiclesController } from './vehicles/vehicles.controller';
 import { VehiclesService } from './vehicles/vehicles.service';
 import { PaymentDetailsController } from './payment-details/payment-details.controller';
 import { PaymentDetailsService } from './payment-details/payment-details.service';
+import { InitController } from './init/init.controller';
+import { InitService } from './init/init.service';
 
 @Module({
   imports: [],
-  controllers: [DriverController, VehiclesController, PaymentDetailsController],
-  providers: [DriverService, VehiclesService, PaymentDetailsService],
+  controllers: [DriverController, VehiclesController, PaymentDetailsController, InitController],
+  providers: [DriverService, VehiclesService, PaymentDetailsService, InitService],
 })
 export class ManagementModule {}
