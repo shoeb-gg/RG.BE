@@ -8,6 +8,29 @@ import { successResponse } from 'src/common/models/res.success';
 export class PaymentDetailsService {
   private readonly prisma = new PrismaClient();
 
+  async getAllPaymentDetails(
+    partnerId: string,
+  ): Promise<PartnerPaymentDetailsDto[]> {
+    try {
+      return await this.prisma.partner_payment_details.findMany({
+        where: {
+          user_id: partnerId,
+        },
+        select: {
+          id: true,
+          account_type: true,
+          mfs_number: true,
+          bank_name: true,
+        },
+      });
+    } catch {
+      throw new HttpException(
+        'Error while Database Operation',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+  }
+
   async upsertPaymentDetails(
     partnerId: string,
     paymentDetails: PartnerPaymentDetailsDto,
@@ -16,11 +39,12 @@ export class PaymentDetailsService {
       PartnerPaymentDetailsDto,
       paymentDetails,
     );
+
     try {
       const upsertPaymentDetails =
         await this.prisma.partner_payment_details.upsert({
           where: {
-            id: partnerId,
+            id: newPaymentDetails.id,
           },
           update: {
             ...newPaymentDetails,
@@ -30,7 +54,6 @@ export class PaymentDetailsService {
             user_id: partnerId,
           },
         });
-      console.log(upsertPaymentDetails);
       return {
         message: 'Data Saved Successfully!',
         status: HttpStatus.CREATED,
@@ -63,19 +86,15 @@ export class PaymentDetailsService {
     }
   }
 
-  async getPaymentDetails(paymentDetailsId: string): Promise<successResponse> {
+  async getPaymentDetails(
+    paymentDetailsId: string,
+  ): Promise<PartnerPaymentDetailsDto> {
     try {
-      const paymentDetails =
-        await this.prisma.partner_payment_details.findFirstOrThrow({
-          where: {
-            id: paymentDetailsId,
-          },
-        });
-      console.log(paymentDetails);
-      return {
-        message: 'Payment Found!',
-        status: HttpStatus.OK,
-      };
+      return await this.prisma.partner_payment_details.findUnique({
+        where: {
+          id: paymentDetailsId,
+        },
+      });
     } catch (error) {
       console.log(error);
       throw new HttpException(
