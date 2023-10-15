@@ -9,9 +9,9 @@ import { HttpModule } from '@nestjs/axios';
   imports: [
     JwtModule.register({
       secret: 'hello',
-      signOptions: { expiresIn: '1d' },
+      signOptions: { expiresIn: '180d' },
     }),
-    HttpModule
+    HttpModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
